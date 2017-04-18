@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(ExternalProject)
 find_package(Git REQUIRED)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+include(Tools3DS)
+find_package(CTRULIB REQUIRED)
 
 ###
 ### Library build config
@@ -37,6 +40,8 @@ if (LIBFOO_BUILD_TESTS)
     add_executable(libfoo_test ${LIBFOO_TEST_FILES})
     add_dependencies(libfoo_test catch)
     target_include_directories(libfoo_test PRIVATE ${CATCH_INCLUDE_DIR})
-    target_link_libraries(libfoo_test foo)
+    target_link_libraries(libfoo_test foo 3ds::ctrulib)
     add_test(NAME LibFoo_Test COMMAND libfoo_test)
+
+    add_3dsx_target(libfoo_test NO_SMDH)
 endif()
