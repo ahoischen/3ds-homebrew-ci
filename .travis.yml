@@ -3,8 +3,7 @@ dist: trusty
 os: linux
 
 env:
-  - DEVKITPRO=/home/travis/devkitPro
-  - DEVKITARM=${DEVKITPRO}/devkitARM
+  - DEVKITPRO="/home/travis/devkitPro" DEVKITARM="${DEVKITPRO}/devkitARM"
 
 before_install:
   - sudo apt-get -qq update
