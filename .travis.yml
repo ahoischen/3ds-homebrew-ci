@@ -12,5 +12,9 @@ before_install:
 install:
   - curl -L "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" > devkitARMupdate.pl
   - chmod +x devkitARMupdate.pl && ./devkitARMupdate.pl
-
+  - curl -L "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" > /tmp/citra.tar.xz
+  - tar xpvf /tmp/citra.tar.xz -C ~/citra
+  - mkdir ~/bin
+  - ln -s ~/citra/citra ~/bin
+  
 script: ./travisscript.sh
