@@ -8,6 +8,8 @@ env:
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test 
   - sudo apt-get -qq update
+  # This is needed to enable sdl2 for citra. It is a long and slow command but sadly necessarry.
+  - sudo apt-get install --install-recommends linux-generic-lts-wily xserver-xorg-core-lts-wily xserver-xorg-lts-wily xserver-xorg-video-all-lts-wily xserver-xorg-input-all-lts-wily libwayland-egl1-mesa-lts-wily
   - sudo apt-get install -y perl libsdl2-2.0-0 build-essential qtbase5-dev libqt5opengl5-dev libstdc++6
 
 install:

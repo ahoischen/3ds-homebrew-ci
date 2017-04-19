@@ -14,6 +14,7 @@ dependencies:
   post:
     - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test 
     - sudo apt-get -qq update
+    - sudo apt-get install --install-recommends linux-generic-lts-wily xserver-xorg-core-lts-wily xserver-xorg-lts-wily xserver-xorg-video-all-lts-wily xserver-xorg-input-all-lts-wily libwayland-egl1-mesa-lts-wily
     - sudo apt-get install -y perl libsdl2-2.0-0 build-essential qtbase5-dev libqt5opengl5-dev libstdc++6
     - curl -L "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" > devkitARMupdate.pl
     - chmod +x devkitARMupdate.pl && ./devkitARMupdate.pl
