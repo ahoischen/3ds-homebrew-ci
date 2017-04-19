@@ -33,15 +33,13 @@ if (LIBFOO_BUILD_TESTS)
     # Includes Catch in the project:
     add_subdirectory(${EXT_PROJECTS_DIR}/catch)
     include_directories(${CATCH_INCLUDE_DIR})
-    enable_testing(true)  # Enables unit-testing.
 
     message("Catch include dir: ${CATCH_INCLUDE_DIR}")
     message("Libfoo test files: ${LIBFOO_TEST_FILES}")
-    add_executable(libfoo_test ${LIBFOO_TEST_FILES})
-    add_dependencies(libfoo_test catch)
-    target_include_directories(libfoo_test PRIVATE ${CATCH_INCLUDE_DIR})
-    target_link_libraries(libfoo_test foo 3ds::ctrulib)
-    add_test(NAME LibFoo_Test COMMAND libfoo_test)
+    add_executable(test_runner ${LIBFOO_TEST_FILES})
+    add_dependencies(test_runner catch)
+    target_include_directories(test_runner PRIVATE ${CATCH_INCLUDE_DIR})
+    target_link_libraries(test_runner foo 3ds::ctrulib)
 
-    add_3dsx_target(libfoo_test NO_SMDH)
+    add_3dsx_target(test_runner NO_SMDH)
 endif()
