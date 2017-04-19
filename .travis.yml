@@ -11,7 +11,7 @@ before_install:
   - sudo apt-get -qq update
   # This is needed to enable sdl2 for citra. It is a long and slow command but sadly necessarry.
   - sudo apt-get install --install-recommends linux-generic-lts-trusty xserver-xorg-lts-trusty libgl1-mesa-glx-lts-trusty
-  - sudo apt-get install -y perl build-essential libstdc++6 cmake cmake-data
+  - sudo apt-get install -y perl build-essential libsdl2 libstdc++6 cmake cmake-data
   # Debugging TravisCI SDL2 failure
   - dpkg -l
 
