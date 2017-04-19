@@ -26,7 +26,7 @@ dependencies:
       "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" | 
       tar xpvJC ~/Applications && ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
     # Debugging TravisCI SDL2 failure
-    - dpkg -l > ${CIRCLE_ARTIFACTS}/dpkg_l
+    - dpkg -l
 
 compile:
   override:
