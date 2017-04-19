@@ -19,4 +19,4 @@ install:
   - mkdir ~/bin
   - ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
 
-script: ./travisscript.sh
+script: ./travisscript.sh build/test_runner.3dsx
