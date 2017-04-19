@@ -15,7 +15,7 @@ cd build
 cmake -DCMAKE_TOOLCHAIN_FILE=DevkitArm3DS.cmake ..
 make
 cd ..
-citra $1 &> /dev/null || true 
+citra $1 || true 
 
 # Make the log file visible to TravisCI
 cat "$TEST_LOG_FILE"
