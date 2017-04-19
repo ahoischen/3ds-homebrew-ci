@@ -6,23 +6,25 @@ machine:
     TEST_EXIT_FILE: "${CITRA_SDMC}/Test Finished.bin"
     TEST_LOG_FILE: "${CITRA_SDMC}/Test Log.txt"
     AUDIODEV: "null"
+
   post:
     - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 +extension RANDR"
     - sleep 3 # give xvfb some time to start
   
 dependencies:
   post:
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test 
-    - sudo apt-get -qq update
-    - sudo apt-get install --install-recommends linux-generic-lts-wily xserver-xorg-core-lts-wily xserver-xorg-lts-wily xserver-xorg-video-all-lts-wily xserver-xorg-input-all-lts-wily libwayland-egl1-mesa-lts-wily
-    - sudo apt-get install -y perl libsdl2-2.0-0 build-essential qtbase5-dev libqt5opengl5-dev libstdc++6
-    - curl -L "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" > devkitARMupdate.pl
-    - chmod +x devkitARMupdate.pl && ./devkitARMupdate.pl
-    - curl -L "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" > /tmp/citra.tar.xz
-    - mkdir -p ~/Applications
-    - tar xpvf /tmp/citra.tar.xz -C ~/Applications
-    - mkdir -p ~/bin
-    - ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
+    - |-
+      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test &> /dev/null &&
+      sudo apt-get -qq update && sudo apt-get -qq install --install-recommends 
+      linux-generic-lts-wily  xserver-xorg-core-lts-wily xserver-xorg-lts-wily
+      xserver-xorg-video-all-lts-wily xserver-xorg-input-all-lts-wily 
+      libwayland-egl1-mesa-lts-wily && sudo apt-get -qq install -y perl 
+      libsdl2-2.0-0 build-essential qtbase5-dev libqt5opengl5-dev libstdc++6
+    - curl -sL "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" | perl
+    - |-
+      mkdir -p ~/Applications ~/bin && curl -sL 
+      "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" | 
+      tar xpvJC ~/Applications && ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
 
 compile:
   override:
@@ -30,6 +32,10 @@ compile:
 
 test:
   override:
-    - citra build/test_runner.3dsx
+    # The test exit file contains the exit code of the test runner. Citra crashes
+    # almost always, so that should be ignored.
+    # Citra's output is supressed since it's always the same.
+    - citra build/test_runner.3dsx &> /dev/null; exit `cat "$TEST_EXIT_FILE" || false`
+
+    # Upload the test logs.
     - cat "$TEST_LOG_FILE"
-    - exit `cat $TEST_EXIT_FILE || false`
