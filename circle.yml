@@ -1,0 +1,31 @@
+machine:
+  environment:
+    DEVKITPRO: "${HOME}/devkitPro"
+    DEVKITARM: "${DEVKITPRO}/devkitARM"
+    CITRA_SDMC: "${HOME}/.local/share/citra-emu/sdmc"
+    TEST_EXIT_FILE: "${CITRA_SDMC}/Test Finished.bin"
+    TEST_LOG_FILE: "${CITRA_SDMC}/Test Log.txt"
+
+  
+dependencies:
+  post:
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test 
+    - sudo apt-get -qq update
+    - sudo apt-get install -y perl libsdl2-2.0-0 build-essential qtbase5-dev libqt5opengl5-dev libstdc++6
+    - curl -L "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" > devkitARMupdate.pl
+    - chmod +x devkitARMupdate.pl && ./devkitARMupdate.pl
+    - curl -L "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" > /tmp/citra.tar.xz
+    - mkdir -p ~/Applications
+    - tar xpvf /tmp/citra.tar.xz -C ~/Applications
+    - mkdir ~/bin
+    - ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
+
+compile:
+  override:
+    - mkdir -p build && cd build && cmake -DCMAKE_TOOLCHAIN_FILE=DevkitArm3DS.cmake .. && make && cd ..
+
+test:
+  override:
+    - citra build/test_runner.3dsx
+    - cat "$TEST_LOG_FILE"
+    - exit `cat $TEST_EXIT_FILE || false`
