@@ -17,7 +17,7 @@ dependencies:
     - curl -L "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" > /tmp/citra.tar.xz
     - mkdir -p ~/Applications
     - tar xpvf /tmp/citra.tar.xz -C ~/Applications
-    - mkdir ~/bin
+    - mkdir -p ~/bin
     - ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
 
 compile:
