@@ -35,7 +35,7 @@ test:
     # The test exit file contains the exit code of the test runner. Citra crashes
     # almost always, so that should be ignored.
     # Citra's output is supressed since it's always the same.
-    - citra build/test_runner.3dsx &> /dev/null; exit `cat "$TEST_EXIT_FILE" || false`
+    - citra build/test_runner.3dsx &> /dev/null; cat "$TEST_LOG_FILE"; exit `cat "$TEST_EXIT_FILE" || false`
 
     # Upload the test logs.
-    - cat "$TEST_LOG_FILE"
+    - cp "$TEST_LOG_FILE" "$CIRCLE_TEST_REPORTS/reports"
