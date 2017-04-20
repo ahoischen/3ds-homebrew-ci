@@ -6,6 +6,9 @@
 
 #include <3ds.h>
 
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
+
 int main(int argc, char **argv) {
 
 	// Minimum boilerplate to make citra not hang.
@@ -15,8 +18,9 @@ int main(int argc, char **argv) {
 	gfxExit();
 
 	// Redirect all output into the log file.
-	stdout = fopen("Test Log.txt", "w");
-	printf("Hello Continually Integrated 3DS World!\n");
+	int catch_argc = 5;
+	char *catch_argv[5] = {"catch", "--reporter", "junit", "--out", "Test Log.txt"};
+	int result = Catch::Session().run(catch_argc, catch_argv);
 
 	fclose(stdout);
 	int exit_code = 0;

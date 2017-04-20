@@ -21,6 +21,7 @@ set(LIBFOO_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/external)
 
 file(GLOB LIBFOO_SOURCE_FILES ${LIBFOO_SOURCE_DIR}/*.cpp)
+include_directories(${LIBFOO_INCLUDE_DIR})
 add_library(foo ${LIBFOO_SOURCE_FILES})
 
 ###
@@ -34,10 +35,9 @@ if (LIBFOO_BUILD_TESTS)
     add_subdirectory(${EXT_PROJECTS_DIR}/catch)
     include_directories(${CATCH_INCLUDE_DIR})
 
-    message("Catch include dir: ${CATCH_INCLUDE_DIR}")
-    message("Libfoo test files: ${LIBFOO_TEST_FILES}")
+    add_definitions(-DCATCH_CONFIG_NO_POSIX_SIGNALS)
     add_executable(test_runner ${LIBFOO_TEST_FILES})
-    add_dependencies(test_runner catch)
+    add_dependencies(test_runner catch foo)
     target_include_directories(test_runner PRIVATE ${CATCH_INCLUDE_DIR})
     target_link_libraries(test_runner foo 3ds::ctrulib)
 
