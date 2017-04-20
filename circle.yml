@@ -38,4 +38,4 @@ test:
     - citra build/test_runner.3dsx &> /dev/null; cat "$TEST_LOG_FILE"; exit `cat "$TEST_EXIT_FILE" || false`
 
     # Upload the test logs.
-    - cp "$TEST_LOG_FILE" "$CIRCLE_TEST_REPORTS/reports"
+    - mkdir -p "$CIRCLE_TEST_REPORTS/reports" && cp "$TEST_LOG_FILE" "$CIRCLE_TEST_REPORTS/reports/junit.xml"
