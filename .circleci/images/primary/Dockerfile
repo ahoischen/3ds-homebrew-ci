@@ -24,11 +24,6 @@ RUN sudo apt-get update && sudo apt-get install -y \
     cmake/testing \
     && sudo apt-get -y clean
 
-# Install the latest libstdc++6, which is only available through a ppa.
-#ADD libstdc++.so.6.0.22 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22
-#RUN sudo rm /usr/lib/x86_64-linux-gnu/libstdc++.so.6 && \
-#    sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22 /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-
 # The devkitARM archive contains the folder, so it has to be extracted in $DEVKITPRO, not ARM.
 ARG devkit_arm_url="https://downloads.sourceforge.net/project/devkitpro/devkitARM/devkitARM_r46/devkitARM_r46-x86_64-linux.tar.bz2"
 RUN sudo mkdir -p /tmp/citra /usr/bin/ "${DEVKITPRO}/libctru" && \
@@ -39,6 +34,52 @@ RUN sudo mkdir -p /tmp/citra /usr/bin/ "${DEVKITPRO}/libctru" && \
 ARG libctru_url="https://github.com/smealum/ctrulib/releases/download/v1.2.1/libctru-1.2.1.tar.bz2"
 RUN curl -L ${libctru_url} | \
     sudo tar xpvj -C "${DEVKITPRO}/libctru"
+
+# Currently libxml2 is not included. See devkitPro/3ds_portlibs#15 for details.
+# Currently tremor isn't installed, because it threw some error. I might add it
+# back in later.
+ARG portlibs_url="https://github.com/devkitPro/3ds_portlibs.git"
+RUN git -C /tmp/ clone "${portlibs_url}" && \
+    sudo -E make -C /tmp/3ds_portlibs \
+        zlib \
+        install-zlib \
+        bzip2 \
+        freetype \
+        giflib \
+        jansson \
+        libconfig \
+        libexif \
+        libjpeg-turbo \
+        libmad \
+        libogg \
+        libpng \
+        libxmp-lite \
+        mbedtls \
+        sqlite \
+        tinyxml2 \
+        xz \
+        install && \
+    sudo rm -rf /tmp/3ds_portlibs
+
+ARG citro3d_url="https://github.com/fincs/citro3d.git"
+RUN git -C /tmp/ clone "${citro3d_url}" && \
+    sudo -E make -C /tmp/citro3d install && \
+    sudo rm -rf /tmp/citro3d
+
+ARG sf2dlib_url="https://github.com/xerpi/sf2dlib.git"
+RUN git -C /tmp/ clone "${sf2dlib_url}" && \
+    sudo -E make -C /tmp/sf2dlib/libsf2d install && \
+    sudo rm -rf /tmp/sf2dlib
+
+ARG sfillib_url="https://github.com/xerpi/sfillib.git"
+RUN git -C /tmp/ clone "${sfillib_url}" && \
+    sudo -E make -C /tmp/sfillib/libsfil install && \
+    sudo rm -rf /tmp/sfillib
+
+ARG sftdlib_url="https://github.com/xerpi/sftdlib.git"
+RUN git -C /tmp/ clone "${sftdlib_url}" && \
+    sudo -E make -C /tmp/sftdlib/libsftd install && \
+    sudo rm -rf /tmp/sftdlib
 
 # Install makerom from source.
 RUN git -C /tmp/ clone "https://github.com/profi200/Project_CTR.git" && \
