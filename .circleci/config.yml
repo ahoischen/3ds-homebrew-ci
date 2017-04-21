@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      #- image: "ahoischen/3ds-homebrew-ci-primary:0.0.3"
-      - image: ubuntu
+      - image: "ahoischen/3ds-homebrew-ci-primary:latest"
         environment:
           TEST_EXIT_FILE: "${CITRA_SDMC}/Test Finished.bin"
           TEST_LOG_FILE: "${CITRA_SDMC}/Test Log.txt"
