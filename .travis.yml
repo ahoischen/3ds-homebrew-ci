@@ -1,31 +1,12 @@
 language: cpp
-dist: precise
+dist: trusty
 os: linux
+sudo: required
 
-env:
-  - DEVKITPRO="/home/travis/devkitPro" DEVKITARM="${DEVKITPRO}/devkitARM"
+services:
+  - docker
 
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test 
-  - sudo add-apt-repository ppa:george-edison55/precise-backports --yes
-  - sudo add-apt-repository -y ppa:team-xbmc/ppa
-  - sudo apt-get -qq update
-  # This is needed to enable sdl2 for citra. It is a long and slow command but sadly necessarry.
-  - sudo apt-get install --install-recommends linux-generic-lts-trusty xserver-xorg-lts-trusty libgl1-mesa-glx-lts-trusty
-  - sudo apt-get install -y perl build-essential libsdl2-dev libstdc++6 cmake cmake-data
-
-install:
-  - curl -L "https://downloads.sourceforge.net/project/devkitpro/Automated%20Installer/devkitARMupdate.pl?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fdevkitpro%2Ffiles%2FAutomated%2520Installer%2F&ts=1492550050&use_mirror=freefr" > devkitARMupdate.pl
-  - chmod +x devkitARMupdate.pl && ./devkitARMupdate.pl
-  - curl -L "https://github.com/citra-emu/citra-nightly/releases/download/nightly-111/citra-linux-20170418-941a3dd.tar.xz" > /tmp/citra.tar.xz
-  - mkdir -p ~/Applications
-  - tar xpvf /tmp/citra.tar.xz -C ~/Applications
-  - mkdir ~/bin
-  - ln -s ~/Applications/citra-linux-20170418-941a3dd/citra ~/bin
-
-before_script:
-  - export AUDIODEV=null
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 +extension RANDR"
-  - sleep 3 # give xvfb some time to start
-
-script: ./travisscript.sh build/test_runner.3dsx
+  - docker pull ahoischen/3ds-homebrew-ci-primary
+  # Just a test.
+  - docker start ahoischen/3ds-homebrew-ci-primary
