@@ -9,4 +9,4 @@ services:
 before_install:
   - docker pull ahoischen/3ds-homebrew-ci-primary
   # Just a test.
-  - docker start ahoischen/3ds-homebrew-ci-primary
+  - docker run ahoischen/3ds-homebrew-ci-primary
